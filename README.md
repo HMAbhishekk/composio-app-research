@@ -2,9 +2,8 @@
 
 **Composio — AI Product Ops Intern take-home.**
 
-- **Live page:** _add your GitHub Pages URL here after publishing (see PUBLISH.md)_
-- **This repo:** _add your repo URL here after pushing_
-
+- - **Live page:** https://dreamy-clafoutis-857e7c.netlify.app/
+   - **This repo:** https://github.com/HMAbhishekk/composio-app-research
 One question, 100 apps: for each app, could Composio build an AI-agent-callable
 toolkit for it *today*, and if not, exactly what's blocking it? The full writeup —
 headline patterns, the 100-app matrix, the agent architecture, and an honest
