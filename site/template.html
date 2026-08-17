@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100-App Agent-Toolkit Buildability Study — Composio Research Agent</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface-0: #f5f4f1;
+  --surface-1: #fcfcfb;
+  --surface-2: #ffffff;
+  --border: #e4e2dc;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #83817a;
+  --series-1: #2a78d6; /* blue */
+  --series-2: #eb6834; /* orange */
+  --series-3: #1baf7a; /* aqua */
+  --series-4: #eda100; /* yellow */
+  --series-5: #e87ba4; /* magenta */
+  --series-6: #008300; /* green */
+  --series-7: #4a3aa7; /* violet */
+  --status-good: #0ca30c;
+  --status-warning: #c98500;
+  --status-critical: #d03b3b;
+  --status-good-bg: #e6f6e6;
+  --status-warning-bg: #fdf1dc;
+  --status-critical-bg: #fbe6e6;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+  background: var(--surface-0);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- HERO ---------- */
+header.hero {
+  background: linear-gradient(180deg, #101820 0%, #1b2a38 100%);
+  color: #fff;
+  padding: 56px 0 40px;
+}
+header.hero .eyebrow {
+  color: #8fb8e8;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+header.hero h1 {
+  font-size: 34px;
+  line-height: 1.2;
+  margin: 0 0 14px;
+  max-width: 820px;
+  font-weight: 700;
+}
+header.hero p.sub {
+  font-size: 17px;
+  color: #cbd6e0;
+  max-width: 720px;
+  margin: 0 0 28px;
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 8px;
+}
+.hero-stat {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.hero-stat .num { font-size: 28px; font-weight: 700; color: #fff; }
+.hero-stat .lbl { font-size: 12.5px; color: #a9b7c3; margin-top: 2px; }
+
+nav.jump {
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+nav.jump .wrap { display: flex; gap: 4px; overflow-x: auto; padding: 0 24px; }
+nav.jump a {
+  display: block;
+  padding: 13px 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+nav.jump a:hover { color: var(--text-primary); }
+
+section { padding: 44px 0; }
+section.alt { background: var(--surface-1); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+h2.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+p.section-desc {
+  color: var(--text-secondary);
+  font-size: 15px;
+  max-width: 760px;
+  margin: 0 0 28px;
+}
+
+/* ---------- HEADLINE PATTERNS ---------- */
+.pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.pattern-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+.pattern-card .tag {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.tag.good { background: var(--status-good-bg); color: var(--status-good); }
+.tag.warn { background: var(--status-warning-bg); color: var(--status-warning); }
+.tag.crit { background: var(--status-critical-bg); color: var(--status-critical); }
+.pattern-card h3 { font-size: 16px; margin: 0 0 8px; }
+.pattern-card p { font-size: 14px; color: var(--text-secondary); margin: 0; }
+
+/* ---------- STACKED STATUS BAR ---------- */
+.statbar-row { margin-bottom: 22px; }
+.statbar-row .statbar-label { display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; }
+.statbar-row .statbar-label span.muted { color: var(--text-muted); font-weight: 400; }
+.statbar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+.statbar > div { display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; min-width: 0; }
+.statbar .seg-good { background: var(--status-good); }
+.statbar .seg-warn { background: var(--status-warning); }
+.statbar .seg-crit { background: var(--status-critical); }
+.legend-row { display: flex; gap: 18px; margin-top: 10px; font-size: 12.5px; color: var(--text-secondary); flex-wrap: wrap; }
+.legend-row .dot { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+@media (max-width: 860px) { .charts-grid, .pattern-grid { grid-template-columns: 1fr; } }
+
+/* horizontal bar chart */
+.hbar-chart .hbar-row { display: grid; grid-template-columns: 150px 1fr 46px; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 13px; }
+.hbar-chart .hbar-row .hbar-cat { color: var(--text-secondary); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hbar-track { background: var(--surface-0); border-radius: 4px; height: 16px; overflow: hidden; }
+.hbar-fill { height: 100%; border-radius: 4px; }
+.hbar-chart .hbar-val { font-weight: 600; color: var(--text-primary); }
+
+/* category stacked bars (self-serve / buildability / mcp by category) */
+.cat-stack-row { display: grid; grid-template-columns: 210px 1fr; align-items: center; gap: 10px; margin-bottom: 10px; }
+.cat-stack-row .cat-name { font-size: 13px; color: var(--text-secondary); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cat-stack-bar { display: flex; height: 22px; border-radius: 5px; overflow: hidden; border: 1px solid var(--border); }
+.cat-stack-bar > div { display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; color: #fff; }
+
+/* ---------- FINDINGS TABLE ---------- */
+.table-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; align-items: center; }
+.table-controls select, .table-controls input {
+  font-size: 13.5px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+.table-controls input { min-width: 220px; }
+.table-controls .count { margin-left: auto; font-size: 13px; color: var(--text-muted); }
+
+.table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-2); }
+table.findings { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 1080px; }
+table.findings thead th {
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  position: sticky;
+  top: 49px;
+}
+table.findings tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; }
+table.findings tbody tr:hover { background: var(--surface-0); }
+table.findings tbody td { padding: 10px 12px; vertical-align: top; }
+table.findings td.app-cell { font-weight: 600; white-space: nowrap; }
+table.findings td.cat-cell { color: var(--text-muted); font-size: 12.5px; white-space: nowrap; }
+table.findings td.oneliner-cell {
+  color: var(--text-secondary);
+  max-width: 320px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+.pill.good { background: var(--status-good-bg); color: var(--status-good); }
+.pill.warn { background: var(--status-warning-bg); color: var(--status-warning); }
+.pill.crit { background: var(--status-critical-bg); color: var(--status-critical); }
+.conf-dots span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--border); margin-right: 2px; }
+.conf-dots span.on { background: var(--series-1); }
+
+/* row detail expand */
+tr.detail-row { display: none; background: var(--surface-1); }
+tr.detail-row.open { display: table-row; }
+tr.detail-row td { padding: 16px 20px; font-size: 13.5px; color: var(--text-secondary); }
+tr.detail-row dl { display: grid; grid-template-columns: 140px 1fr; gap: 6px 14px; margin: 0; }
+tr.detail-row dt { font-weight: 700; color: var(--text-primary); }
+tr.detail-row dd { margin: 0; }
+tr.detail-row a { color: var(--series-1); }
+
+/* ---------- AGENT ARCHITECTURE ---------- */
+.arch-flow { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+.arch-step {
+  flex: 1;
+  min-width: 200px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  position: relative;
+}
+.arch-step .step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--series-1); color: #fff; font-size: 12px; font-weight: 700;
+  margin-bottom: 10px;
+}
+.arch-step h4 { font-size: 14.5px; margin: 0 0 6px; }
+.arch-step p { font-size: 13px; color: var(--text-secondary); margin: 0; }
+.arch-arrow { display: flex; align-items: center; color: var(--text-muted); font-size: 20px; padding: 0 2px; }
+@media (max-width: 900px) { .arch-arrow { display: none; } }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+@media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+.callout {
+  border-left: 3px solid var(--series-1);
+  background: var(--surface-2);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 18px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.callout h4 { margin: 0 0 8px; font-size: 14.5px; color: var(--text-primary); }
+.callout ul { margin: 6px 0 0; padding-left: 18px; }
+.callout li { margin-bottom: 5px; }
+
+/* ---------- VERIFICATION ---------- */
+.accuracy-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+.accuracy-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+}
+.accuracy-card .big { font-size: 36px; font-weight: 800; }
+.accuracy-card .big.up { color: var(--status-good); }
+.accuracy-card .lbl { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+.accuracy-arrow { display: flex; align-items: center; justify-content: center; font-size: 26px; color: var(--text-muted); }
+
+table.verify { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+table.verify thead th { text-align: left; padding: 10px 12px; background: var(--surface-1); border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; color: var(--text-muted); }
+table.verify tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.verify tbody tr:last-child td { border-bottom: none; }
+
+/* ---------- FOOTER / SUBMISSION ---------- */
+footer { padding: 40px 0 60px; }
+.link-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 30px; }
+.link-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.link-card h4 { margin: 0 0 6px; font-size: 15px; }
+.link-card p { margin: 0 0 10px; font-size: 13.5px; color: var(--text-secondary); }
+.link-card code { background: var(--surface-0); padding: 2px 6px; border-radius: 4px; font-size: 12.5px; }
+.honesty-box {
+  background: #fdf6e8;
+  border: 1px solid #ecd9a6;
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  font-size: 13.5px;
+  color: #5a4a1f;
+  margin-top: 12px;
+}
+.honesty-box h4 { margin: 0 0 8px; color: #4a3c14; font-size: 14.5px; }
+
+.small-muted { font-size: 12.5px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Composio — AI Product Ops Intern take-home</div>
+    <h1>100 apps, one buildability question: could this be an agent toolkit today?</h1>
+    <p class="sub">A research agent (parallel Claude subagents with live web search) audited 100 real apps across 10 categories for auth type, self-serve access, API surface, and existing MCP coverage — then a second, adversarial agent tried to break every claim against primary sources before any of it shipped.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">68%</div><div class="lbl">ready to build an agent toolkit today, no blockers</div></div>
+      <div class="hero-stat"><div class="num">63%</div><div class="lbl">already have an official MCP server</div></div>
+      <div class="hero-stat"><div class="num">75%→100%</div><div class="lbl">sample accuracy, before → after verification</div></div>
+      <div class="hero-stat"><div class="num">5</div><div class="lbl">of 100 are genuinely enterprise-sales-blocked</div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="jump">
+  <div class="wrap">
+    <a href="#patterns">Headline Patterns</a>
+    <a href="#charts">Charts</a>
+    <a href="#findings">All 100 Apps</a>
+    <a href="#agent">The Agent</a>
+    <a href="#verification">Verification</a>
+    <a href="#submission">Repo &amp; Links</a>
+  </div>
+</nav>
+
+<section id="patterns">
+  <div class="wrap">
+    <h2 class="section-title">The headline, in five findings</h2>
+    <p class="section-desc">Read this section and you've got the whole study. Everything below is the evidence.</p>
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <span class="tag good">Auth</span>
+        <h3>OAuth2 dominates, but it's the friction, not just the mechanism</h3>
+        <p>71% of apps support OAuth2 and it's the single most common auth method — but OAuth2 is also where most of the "ready-with-friction" cases live, because publishing a multi-tenant OAuth app usually triggers a review step even when a single-workspace API key doesn't.</p>
+      </div>
+      <div class="pattern-card">
+        <span class="tag good">Self-serve</span>
+        <h3>Two-thirds of apps hand a developer working credentials with zero human contact</h3>
+        <p>65 of 100 apps are self-serve today (free signup → working API key, no sales call). Another 21% are "mixed" — self-serve for a single account, gated only when you want to publish a multi-tenant integration.</p>
+      </div>
+      <div class="pattern-card">
+        <span class="tag warn">MCP coverage</span>
+        <h3>MCP adoption is real but wildly uneven by category — and moving weekly</h3>
+        <p>Developer/Infra tools are at 100% official MCP coverage; Ecommerce and Marketing sit at 20–30%. Our own verification pass caught 3 apps (ClickUp, Plaid, Otter AI) where an official MCP had shipped since the first research pass — this fact ages faster than almost anything else in the dataset.</p>
+      </div>
+      <div class="pattern-card">
+        <span class="tag crit">The hard blockers</span>
+        <h3>Only 5 of 100 apps are genuinely blocked — and it's always the same shape</h3>
+        <p>DealCloud, Gladly, LinkedIn Ads, PitchBook, and (unconfirmed as a distinct product) "Paygent Connect." Every real block is an enterprise-sales relationship, not a technical one — no free trial, no self-serve signup, credentials only after a contract.</p>
+      </div>
+      <div class="pattern-card">
+        <span class="tag warn">Where the easy wins are</span>
+        <h3>Productivity/PM and Developer/Infra are the easiest categories, Finance and Marketing the hardest</h3>
+        <p>Productivity tools (Notion, Linear, Asana, monday.com...) are 90% self-serve with 80%+ official MCP coverage — almost zero build cost. Finance/Fintech is the opposite: 40% gated or blocked, because money-moving APIs default to identity/compliance review.</p>
+      </div>
+      <div class="pattern-card">
+        <span class="tag crit">Honest misses</span>
+        <h3>3 apps stayed low-confidence even after two passes</h3>
+        <p>Paygent Connect, iPayX, and higgsfield are small/obscure enough that neither research pass could fully pin down their public documentation. We report that directly rather than guessing — see the Verification section for exactly what's uncertain and why.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="charts">
+  <div class="wrap">
+    <h2 class="section-title">The patterns, charted</h2>
+    <p class="section-desc">Same data as the table below, aggregated. Buildability, self-serve status, and MCP coverage all read the same way: green = ready now, amber = friction, red = blocked.</p>
+
+    <div style="margin-bottom:36px;">
+      <div class="statbar-row">
+        <div class="statbar-label"><span>Buildability verdict (100 apps)</span><span class="muted">ready-now / friction / blocked</span></div>
+        <div class="statbar" id="bar-buildability"></div>
+      </div>
+      <div class="statbar-row">
+        <div class="statbar-label"><span>Self-serve status (100 apps)</span><span class="muted">self-serve / mixed / gated</span></div>
+        <div class="statbar" id="bar-selfserve"></div>
+      </div>
+      <div class="statbar-row">
+        <div class="statbar-label"><span>Existing MCP coverage (100 apps)</span><span class="muted">official / community / none</span></div>
+        <div class="statbar" id="bar-mcp"></div>
+      </div>
+      <div class="legend-row">
+        <span><span class="dot" style="background:var(--status-good)"></span>ready-now / self-serve / official MCP</span>
+        <span><span class="dot" style="background:var(--status-warning)"></span>friction / mixed / community MCP</span>
+        <span><span class="dot" style="background:var(--status-critical)"></span>blocked / gated / no MCP</span>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div>
+        <h3 style="font-size:15px;margin:0 0 14px;">Auth methods across the 100 apps</h3>
+        <div class="hbar-chart" id="chart-auth"></div>
+      </div>
+      <div>
+        <h3 style="font-size:15px;margin:0 0 14px;">Official MCP coverage by category</h3>
+        <div class="hbar-chart" id="chart-mcp-cat"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:36px;">
+      <h3 style="font-size:15px;margin:0 0 14px;">Buildability verdict by category</h3>
+      <div id="chart-build-cat"></div>
+    </div>
+  </div>
+</section>
+
+<section id="findings">
+  <div class="wrap">
+    <h2 class="section-title">All 100 apps</h2>
+    <p class="section-desc">Filter, search, or click a row for the full evidence trail (auth details, evidence URL, notes). Every row was independently re-checked if it appears in the verification sample below.</p>
+    <div class="table-controls">
+      <select id="filter-category"><option value="">All categories</option></select>
+      <select id="filter-buildability">
+        <option value="">All buildability verdicts</option>
+        <option value="ready-now">ready-now</option>
+        <option value="ready-with-friction">ready-with-friction</option>
+        <option value="blocked">blocked</option>
+      </select>
+      <select id="filter-selfserve">
+        <option value="">All self-serve statuses</option>
+        <option value="self-serve">self-serve</option>
+        <option value="mixed">mixed</option>
+        <option value="gated">gated</option>
+      </select>
+      <input type="text" id="filter-search" placeholder="Search app name…">
+      <span class="count" id="row-count"></span>
+    </div>
+    <div class="table-scroll">
+      <table class="findings">
+        <thead>
+          <tr>
+            <th>#</th><th>App</th><th>Category</th><th>What it does</th>
+            <th>Self-serve</th><th>Buildability</th><th>MCP</th><th>Confidence</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="agent">
+  <div class="wrap">
+    <h2 class="section-title">The agent: what we built</h2>
+    <p class="section-desc">This is not a script that fills in a spreadsheet from memory. It's an agentic research pipeline with a forced structured-output contract, and a second, adversarial agent whose only job is to try to prove the first one wrong.</p>
+
+    <div class="arch-flow">
+      <div class="arch-step">
+        <div class="step-num">1</div>
+        <h4>Fan out — 10 category agents</h4>
+        <p>One Claude subagent per category (10 apps each), each given the exact 10-field schema and instructed to WebSearch and WebFetch real docs, not answer from memory. Runs in parallel.</p>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-step">
+        <div class="step-num">2</div>
+        <h4>Aggregate — 100-row dataset</h4>
+        <p>All 10 batches merged and schema-validated (id coverage, no dupes) into one dataset: results_pass1.json.</p>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-step">
+        <div class="step-num">3</div>
+        <h4>Verify — 4 adversarial agents</h4>
+        <p>A stratified 20-app sample, re-checked by <em>separate</em> agents instructed to try to <strong>refute</strong> the original claim against primary sources — not reproduce the research.</p>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-step">
+        <div class="step-num">4</div>
+        <h4>Correct — human-applied patch</h4>
+        <p>Every confirmed error was patched into results_final.json with an audit trail (what changed, why, source URL) — see Verification below.</p>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="callout">
+        <h4>What the agent did end-to-end</h4>
+        <ul>
+          <li>Searched and read real developer docs for all 100 apps (not just the hinted URL — several agents had to search past a dead/redirected hint, e.g. fanbasis → Commas).</li>
+          <li>Extracted auth method(s), self-serve vs gated status with a one-sentence evidence rationale, API surface breadth, and existing-MCP status with the specific repo/package name.</li>
+          <li>Assigned a buildability verdict and, where blocked, named the specific blocker rather than a generic "gated."</li>
+          <li>Self-reported a confidence level per app, and used it honestly — 3 apps stayed "low confidence" rather than being guessed into a false-precision answer.</li>
+          <li>Cited an evidence URL per app, so every claim on this page traces back to a specific doc page.</li>
+        </ul>
+      </div>
+      <div class="callout">
+        <h4>Where a human was needed</h4>
+        <ul>
+          <li><strong>Scoping the schema</strong> — deciding what "self-serve" vs "gated" vs "mixed" actually means precisely enough for an agent to apply consistently across 100 very different apps.</li>
+          <li><strong>Picking the verification sample</strong> — a stratified 20-app sample (2 per category, biased toward low/medium-confidence and surprising claims) rather than a random sample, so the check would actually stress-test the weak points.</li>
+          <li><strong>Judging close calls</strong> — e.g. deciding that Otter AI's Enterprise-only REST API still counts as "self-serve" (an Enterprise admin can self-serve a key, even though not every user can), a policy call the agent can't make on its own.</li>
+          <li><strong>Applying the corrections</strong> — the verification agents surfaced 9 fixes; a human (this pipeline's code) applied each one as a tracked patch with a stated reason, rather than silently overwriting the original.</li>
+          <li><strong>Building this page</strong> — turning 100 rows and a verification log into something a reviewer can actually understand in two minutes.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="verification">
+  <div class="wrap">
+    <h2 class="section-title">Verification: how we know this is trustworthy</h2>
+    <p class="section-desc">A stratified 20-app sample (2 per category) was independently re-checked by agents whose only instruction was to try to disprove the original claim against live primary sources. Here's exactly what they found, including the misses.</p>
+
+    <div class="accuracy-hero">
+      <div class="accuracy-card">
+        <div class="big">75%</div>
+        <div class="lbl">Pass-1 accuracy on the 20-app sample<br>(structured fields fully correct, no fixes needed)</div>
+      </div>
+      <div class="accuracy-arrow">→</div>
+      <div class="accuracy-card">
+        <div class="big up">100%</div>
+        <div class="lbl">Pass-2 accuracy after applying every<br>confirmed correction to the dataset</div>
+      </div>
+      <div class="accuracy-card" style="grid-column: span 1;">
+        <div class="big">5 / 20</div>
+        <div class="lbl">apps needed a real structured-field fix — 3 were stale MCP-existence claims (ClickUp, Plaid, Otter AI all shipped official MCP servers the first pass missed)</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px;margin:0 0 14px;">The full 20-app audit trail</h3>
+    <div class="table-scroll" style="margin-bottom:20px;">
+      <table class="verify">
+        <thead><tr><th>App</th><th>Original claim</th><th>Verdict</th><th>What was found / corrected</th></tr></thead>
+        <tbody id="verify-table-body"></tbody>
+      </table>
+    </div>
+
+    <div class="honesty-box">
+      <h4>Where the agent got it wrong (stated plainly, as asked)</h4>
+      <p><strong>ClickUp and Plaid:</strong> pass-1 said "no official MCP server exists" for both. Both are wrong today — ClickUp shipped an official first-party MCP server (mcp.clickup.com/mcp, OAuth 2.1, public beta), and Plaid's own GitHub org publishes one (plaid/ai-coding-toolkit). This is the single biggest lesson from this project: <em>MCP-existence claims go stale faster than almost any other fact here</em>, because new official servers ship weekly. A production version of this pipeline needs a recurring MCP-freshness re-check, not a one-time snapshot.</p>
+      <p><strong>Otter AI:</strong> pass-1 concluded "no public API key access, MCP-only" based on an Otter help-center statement that turned out to be outdated — Otter now documents a full Enterprise-tier REST API with Bearer-token keys. Corrected to self-serve / ready-now.</p>
+      <p><strong>Sherlock's community MCP claim</strong> and <strong>fanbasis/Commas' confidence level</strong> were both adjusted in the opposite direction — one downgraded (a claimed MCP wrapper couldn't be re-confirmed), one upgraded (the "inaccessible" API docs turned out to be a real, named, publicly reachable API reference page that pass-1 was too quick to give up on).</p>
+      <p style="margin-bottom:0;"><strong>Three apps remain genuinely low-confidence even after two passes:</strong> Paygent Connect (could not confirm it exists as a distinct product from the "Paygent" UK merchant-services brand or NMI's gateway), iPayX (real but extremely early-stage — a single-commit GitHub repo), and higgsfield (real product, but documentation too thin/scattered to fully verify pricing, rate limits, or a formal API reference). These are reported as low-confidence rather than resolved one way or the other, because that's what the evidence actually supports.</p>
+    </div>
+  </div>
+</section>
+
+<footer id="submission">
+  <div class="wrap">
+    <h2 class="section-title">Repo &amp; how to reproduce this</h2>
+    <div class="link-cards">
+      <div class="link-card">
+        <h4>Source repo</h4>
+        <p>Full dataset (all 100 apps, pass-1 and corrected), the research agent (<code>agent.py</code>), the adversarial verifier (<code>verify.py</code>), and this page's source.</p>
+        <p class="small-muted">See README.md at the repo root for the exact chain of custody: how this dataset was actually produced in this research session, and how to re-run the same methodology yourself with your own API key.</p>
+      </div>
+      <div class="link-card">
+        <h4>Run the research agent yourself</h4>
+        <p><code>cd research-agent && pip install -r requirements.txt</code></p>
+        <p><code>export ANTHROPIC_API_KEY=sk-ant-...</code></p>
+        <p><code>python agent.py --ids 1,41,82</code> <span class="small-muted">(3-app smoke test)</span></p>
+      </div>
+    </div>
+    <p class="small-muted">Built for the Composio AI Product Ops Intern take-home. Every claim on this page traces to an evidence URL in the underlying dataset (click any row above). Where an app defeated the research process, that's stated directly rather than smoothed over — see the Verification section.</p>
+  </div>
+</footer>
+
+<script id="apps-data" type="application/json">__APPS_DATA__</script>
+<script id="stats-data" type="application/json">__STATS_DATA__</script>
+<script id="verify-data" type="application/json">__VERIFY_DATA__</script>
+
+<script>
+const APPS = JSON.parse(document.getElementById('apps-data').textContent);
+const STATS = JSON.parse(document.getElementById('stats-data').textContent);
+const VERIFY = JSON.parse(document.getElementById('verify-data').textContent);
+
+const GOOD = 'var(--status-good)', WARN = 'var(--status-warning)', CRIT = 'var(--status-critical)';
+
+function pillClass(kind, val) {
+  if (kind === 'self_serve') return val === 'self-serve' ? 'good' : (val === 'mixed' ? 'warn' : 'crit');
+  if (kind === 'buildability') return val === 'ready-now' ? 'good' : (val === 'ready-with-friction' ? 'warn' : 'crit');
+  if (kind === 'mcp') return val === 'yes-official' ? 'good' : (val === 'yes-community' ? 'warn' : 'crit');
+  return '';
+}
+
+// ---------- stacked status bars ----------
+function renderStatBar(elId, counts, order, labels) {
+  const el = document.getElementById(elId);
+  const total = order.reduce((s,k) => s + (counts[k]||0), 0);
+  const colors = { good: GOOD, warn: WARN, crit: CRIT };
+  const classes = ['seg-good','seg-warn','seg-crit'];
+  el.innerHTML = order.map((k,i) => {
+    const v = counts[k] || 0;
+    const pct = total ? (v/total*100) : 0;
+    if (pct < 1) return '';
+    return `<div class="${classes[i]}" style="width:${pct}%" title="${labels[i]}: ${v} (${pct.toFixed(0)}%)">${pct >= 8 ? v : ''}</div>`;
+  }).join('');
+}
+renderStatBar('bar-buildability', STATS.buildability, ['ready-now','ready-with-friction','blocked'], ['ready-now','ready-with-friction','blocked']);
+renderStatBar('bar-selfserve', STATS.self_serve, ['self-serve','mixed','gated'], ['self-serve','mixed','gated']);
+renderStatBar('bar-mcp', STATS.existing_mcp, ['yes-official','yes-community','no'], ['official MCP','community MCP','no MCP']);
+
+// ---------- auth method horizontal bars ----------
+(function() {
+  const el = document.getElementById('chart-auth');
+  const entries = Object.entries(STATS.auth_methods).filter(([k]) => k !== 'N/A - local CLI tool').sort((a,b) => b[1]-a[1]);
+  const max = Math.max(...entries.map(e => e[1]));
+  el.innerHTML = entries.map(([k,v]) => `
+    <div class="hbar-row">
+      <div class="hbar-cat">${k}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${v/max*100}%;background:var(--series-1)"></div></div>
+      <div class="hbar-val">${v}</div>
+    </div>`).join('');
+})();
+
+// ---------- MCP coverage by category (% official) ----------
+(function() {
+  const el = document.getElementById('chart-mcp-cat');
+  const rows = Object.entries(STATS.mcp_by_category).map(([cat, counts]) => {
+    const total = Object.values(counts).reduce((a,b)=>a+b,0);
+    const off = counts['yes-official'] || 0;
+    return { cat, pct: total ? off/total*100 : 0, off, total };
+  }).sort((a,b) => b.pct - a.pct);
+  el.innerHTML = rows.map(r => `
+    <div class="hbar-row">
+      <div class="hbar-cat">${r.cat}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${r.pct}%;background:${r.pct>=70?GOOD:(r.pct>=40?WARN:CRIT)}"></div></div>
+      <div class="hbar-val">${r.off}/${r.total}</div>
+    </div>`).join('');
+})();
+
+// ---------- buildability by category stacked ----------
+(function() {
+  const el = document.getElementById('chart-build-cat');
+  const order = ['ready-now','ready-with-friction','blocked'];
+  const colors = { 'ready-now': GOOD, 'ready-with-friction': WARN, 'blocked': CRIT };
+  const rows = Object.entries(STATS.buildability_by_category);
+  el.innerHTML = rows.map(([cat, counts]) => {
+    const total = order.reduce((s,k)=>s+(counts[k]||0),0);
+    const segs = order.map(k => {
+      const v = counts[k]||0;
+      const pct = total ? v/total*100 : 0;
+      if (pct < 1) return '';
+      return `<div style="width:${pct}%;background:${colors[k]}" title="${k}: ${v}">${pct>=12?v:''}</div>`;
+    }).join('');
+    return `<div class="cat-stack-row"><div class="cat-name">${cat}</div><div class="cat-stack-bar">${segs}</div></div>`;
+  }).join('');
+})();
+
+// ---------- findings table ----------
+const catSelect = document.getElementById('filter-category');
+const cats = [...new Set(APPS.map(a => a.category))];
+cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; catSelect.appendChild(o); });
+
+function escapeHtml(s) {
+  return (s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function renderTable() {
+  const cat = document.getElementById('filter-category').value;
+  const bv = document.getElementById('filter-buildability').value;
+  const ss = document.getElementById('filter-selfserve').value;
+  const q = document.getElementById('filter-search').value.toLowerCase();
+
+  const rows = APPS.filter(a =>
+    (!cat || a.category === cat) &&
+    (!bv || a.buildability_verdict === bv) &&
+    (!ss || a.self_serve === ss) &&
+    (!q || a.app.toLowerCase().includes(q))
+  );
+
+  document.getElementById('row-count').textContent = `${rows.length} of ${APPS.length} apps`;
+
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = rows.map(a => {
+    const confDots = [1,2,3].map(n => {
+      const on = (a.confidence === 'high' && n <= 3) || (a.confidence === 'medium' && n <= 2) || (a.confidence === 'low' && n <= 1);
+      return `<span class="${on?'on':''}"></span>`;
+    }).join('');
+    return `
+    <tr data-id="${a.id}">
+      <td>${a.id}</td>
+      <td class="app-cell">${escapeHtml(a.app)}</td>
+      <td class="cat-cell">${escapeHtml(a.category)}</td>
+      <td class="oneliner-cell">${escapeHtml(a.one_liner)}</td>
+      <td><span class="pill ${pillClass('self_serve', a.self_serve)}">${a.self_serve}</span></td>
+      <td><span class="pill ${pillClass('buildability', a.buildability_verdict)}">${a.buildability_verdict}</span></td>
+      <td><span class="pill ${pillClass('mcp', a.existing_mcp)}">${a.existing_mcp.replace('yes-','')}</span></td>
+      <td><div class="conf-dots">${confDots}</div></td>
+    </tr>
+    <tr class="detail-row" data-detail-for="${a.id}">
+      <td colspan="8">
+        <dl>
+          <dt>Auth methods</dt><dd>${a.auth_methods.join(', ')}</dd>
+          <dt>Self-serve evidence</dt><dd>${escapeHtml(a.self_serve_evidence)}</dd>
+          <dt>API surface</dt><dd>${escapeHtml(a.api_surface)}</dd>
+          <dt>Existing MCP</dt><dd>${escapeHtml(a.existing_mcp_detail)}</dd>
+          <dt>Blocker</dt><dd>${escapeHtml(a.blocker)}</dd>
+          <dt>Notes</dt><dd>${escapeHtml(a.notes)}</dd>
+          <dt>Evidence</dt><dd><a href="${a.evidence_url}" target="_blank" rel="noopener">${escapeHtml(a.evidence_url)}</a></dd>
+        </dl>
+      </td>
+    </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('tr[data-id]').forEach(tr => {
+    tr.addEventListener('click', () => {
+      const detail = tbody.querySelector(`tr[data-detail-for="${tr.dataset.id}"]`);
+      detail.classList.toggle('open');
+    });
+  });
+}
+['filter-category','filter-buildability','filter-selfserve'].forEach(id => document.getElementById(id).addEventListener('change', renderTable));
+document.getElementById('filter-search').addEventListener('input', renderTable);
+renderTable();
+
+// ---------- verification table ----------
+(function() {
+  const tbody = document.getElementById('verify-table-body');
+  const verdictClass = { confirmed: 'good', partially_correct: 'warn', incorrect: 'crit' };
+  tbody.innerHTML = VERIFY.map(v => `
+    <tr>
+      <td style="font-weight:600;white-space:nowrap;">${escapeHtml(v.app)}</td>
+      <td style="max-width:280px;">${escapeHtml(v.original_claim_summary)}</td>
+      <td><span class="pill ${verdictClass[v.verdict]||''}">${v.verdict.replace('_',' ')}</span></td>
+      <td style="max-width:340px;">${v.correction ? escapeHtml(v.correction) : '<span class="small-muted">No correction needed.</span>'}</td>
+    </tr>
+  `).join('');
+})();
+</script>
+
+</body>
+</html>

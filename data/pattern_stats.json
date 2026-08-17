@@ -1,0 +1,171 @@
+{
+  "total_apps": 100,
+  "auth_methods": {
+    "OAuth2": 71,
+    "JWT": 6,
+    "Bearer Token": 48,
+    "API Key": 58,
+    "Basic Auth": 16,
+    "Other": 14,
+    "N/A - local CLI tool": 1
+  },
+  "self_serve": {
+    "mixed": 21,
+    "self-serve": 65,
+    "gated": 14
+  },
+  "buildability": {
+    "ready-now": 68,
+    "blocked": 5,
+    "ready-with-friction": 27
+  },
+  "existing_mcp": {
+    "yes-official": 63,
+    "yes-community": 28,
+    "no": 9
+  },
+  "confidence": {
+    "high": 75,
+    "medium": 22,
+    "low": 3
+  },
+  "self_serve_by_category": {
+    "CRM and Sales": {
+      "mixed": 2,
+      "self-serve": 7,
+      "gated": 1
+    },
+    "Support and Helpdesk": {
+      "self-serve": 6,
+      "mixed": 3,
+      "gated": 1
+    },
+    "Communications and Messaging": {
+      "self-serve": 8,
+      "gated": 1,
+      "mixed": 1
+    },
+    "Marketing, Ads, Email and Social": {
+      "mixed": 1,
+      "gated": 4,
+      "self-serve": 5
+    },
+    "Ecommerce": {
+      "mixed": 4,
+      "self-serve": 4,
+      "gated": 2
+    },
+    "Data, SEO and Scraping": {
+      "self-serve": 8,
+      "mixed": 2
+    },
+    "Developer, Infra and Data platforms": {
+      "self-serve": 8,
+      "mixed": 2
+    },
+    "Productivity and Project Management": {
+      "self-serve": 9,
+      "mixed": 1
+    },
+    "Finance and Fintech": {
+      "self-serve": 3,
+      "mixed": 3,
+      "gated": 4
+    },
+    "AI, Research and Media-native": {
+      "gated": 1,
+      "self-serve": 7,
+      "mixed": 2
+    }
+  },
+  "buildability_by_category": {
+    "CRM and Sales": {
+      "ready-now": 9,
+      "blocked": 1
+    },
+    "Support and Helpdesk": {
+      "ready-now": 7,
+      "ready-with-friction": 2,
+      "blocked": 1
+    },
+    "Communications and Messaging": {
+      "ready-now": 8,
+      "ready-with-friction": 2
+    },
+    "Marketing, Ads, Email and Social": {
+      "ready-with-friction": 4,
+      "blocked": 1,
+      "ready-now": 5
+    },
+    "Ecommerce": {
+      "ready-now": 5,
+      "ready-with-friction": 5
+    },
+    "Data, SEO and Scraping": {
+      "ready-now": 7,
+      "ready-with-friction": 3
+    },
+    "Developer, Infra and Data platforms": {
+      "ready-now": 7,
+      "ready-with-friction": 3
+    },
+    "Productivity and Project Management": {
+      "ready-now": 9,
+      "ready-with-friction": 1
+    },
+    "Finance and Fintech": {
+      "ready-now": 4,
+      "ready-with-friction": 4,
+      "blocked": 2
+    },
+    "AI, Research and Media-native": {
+      "ready-with-friction": 3,
+      "ready-now": 7
+    }
+  },
+  "mcp_by_category": {
+    "CRM and Sales": {
+      "yes-official": 8,
+      "yes-community": 2
+    },
+    "Support and Helpdesk": {
+      "yes-community": 1,
+      "yes-official": 8,
+      "no": 1
+    },
+    "Communications and Messaging": {
+      "yes-official": 5,
+      "yes-community": 5
+    },
+    "Marketing, Ads, Email and Social": {
+      "yes-official": 3,
+      "yes-community": 7
+    },
+    "Ecommerce": {
+      "yes-official": 2,
+      "yes-community": 7,
+      "no": 1
+    },
+    "Data, SEO and Scraping": {
+      "yes-official": 7,
+      "no": 3
+    },
+    "Developer, Infra and Data platforms": {
+      "yes-official": 10
+    },
+    "Productivity and Project Management": {
+      "yes-official": 8,
+      "yes-community": 2
+    },
+    "Finance and Fintech": {
+      "yes-official": 6,
+      "yes-community": 1,
+      "no": 3
+    },
+    "AI, Research and Media-native": {
+      "no": 1,
+      "yes-official": 6,
+      "yes-community": 3
+    }
+  }
+}
